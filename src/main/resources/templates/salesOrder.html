@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <title>销售单</title>
+    <link rel="stylesheet" href="/plugins/layui/css/layui.css" media="all" />
+    <script src="/plugins/layui/layui.js"></script>
+    <script src="/res/js/jquery.min.js"></script>
+    <style>
+        body{margin: 10px;}
+        .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
+    </style>
+</head>
+<body>
+    <!--当前登录人信息-->
+    <input id="userName" name="userName" type="hidden" th:value="${session.user}"/>
+
+    <input id="url" name="url" type="hidden" th:value="${url}"/>
+    <input id="count" name="count" type="hidden" />
+    <input id="pageNum" name="pageNum" type="hidden" />
+<div style="margin: 15px;">
+    <fieldset class="layui-elem-field">
+        <legend>销售单管理 </legend>
+        <form class="layui-form" action="">
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">选择时间段</label>
+                <div class="layui-input-inline">
+                    <select name="timePick">
+                        <option value="">全部</option>
+                        <option value="1">一天内</option>
+                        <option value="2">两天内</option>
+                        <option value="3">三天内</option>
+                        <option value="7">一周内</option>
+                        <option value="30">一个月内</option>
+                    </select>
+                </div>
+
+                <div class="layui-input-inline">
+                    <button class="layui-btn" lay-submit="" lay-filter="formDemo">查询</button>
+                </div>
+
+            </div>
+
+        </form>
+        <table id="pageList" class="layui-table" lay-filter="demo">
+        </table>
+    </fieldset>
+</div>
+
+<div id="pageDemo"></div>
+
+<script type="text/html" id="barDemo">
+    <div class="layui-btn-group">
+        <button class="layui-btn layui-btn-small" lay-event="edit" >编辑</button>
+        <button class="layui-btn layui-btn-danger layui-btn-small" lay-event="del">删除</button>
+    </div>
+</script>
+<script>
+    var username = document.getElementById("userName").value;
+    var url = '/salesOrder/data/1';
+    var nurl = document.getElementById("url").value;
+    var turl = null;
+    if (nurl == ''||nurl == null||nurl==undefined){
+        turl = url;
+    }else turl = nurl;
+    var count = null;
+    var currPage = null;
+    layui.use(['form','laypage', 'layer', 'table', 'element'], function(){
+        var form = layui.form,
+          layer = layui.layer;//弹层
+          table = layui.table; //表格
+          element = layui.element;//元素操作
+          laypage = layui.laypage; //分页
+//        table.init('filter', options); //转化静态表格
+        table.render({
+            id:'tid',
+            elem:'#pageList',
+            width:1350,
+//            page:'true',
+            url:turl,
+            cols: [[
+                {field:'id', title: '文章ID', width:80, sort: true}
+                ,{field:'partid', title: '零件id', width:80, sort: true}
+                ,{field:'saletime', title: '销售时间', width:144, sort: true}
+                ,{field:'salenumber', title: '销售数量', width:220, sort: true}
+                ,{field:'userName', title: '销售员姓名', width:100}
+                ,{field:'payway', title: '付款方式', width:100}
+                ,{field:'clientName', title: '客户姓名', width:100}
+                ,{field:'describe', title: '备注信息', width:100}
+                ,{toolbar:'#barDemo', title: '操作', width:330}
+            ]]
+        });
+
+        $.ajax({
+            url:turl,
+            dataType:"json",   //返回格式为json
+            type:"GET" , //请求方式 get 或者post
+            success:function (data) {
+                page(data);
+            }
+        });
+        function page(data) {
+            count = data.count;
+            currPage = data.pageNum;
+            //分页 ajax 可以的到当前的count
+            laypage.render({
+                elem: 'pageDemo' //分页容器的id
+                , limit: 10
+                , count: count
+                , curr: currPage
+                , skin: '#1E9FFF' //自定义选中色值
+                , skip: true //开启跳页
+                , prev: '上一页 '
+                , next: ' 下一页'
+                , jump: function (obj, first) {
+                    if (!first) {
+                        var currentPage = obj.curr;//获取点击的页码
+//                        alert(obj.curr);
+                        url = '/salesOrder/data/'  + currentPage;
+                        window.location.href = '/salesOrder/SaleOrderPage?url=' + url;
+                    }
+                }
+
+            });
+            // 定义field变量内容
+            var timePick;
+            var search ;
+
+            //监听提交
+            form.on('submit(formDemo)', function(data) {
+
+                timePick = data.field.timePick;
+                search = data.field.search;
+                if(timePick != null){
+                    url = '/salesOrder/data/1?timePick='+timePick;
+                }else{
+                    url = '/salesOrder/data/1';
+                }
+                window.location.href = '/salesOrder/SaleOrderPage?url=' + url;
+                return false;
+            });
+
+
+            //监听工具条
+            table.on('tool(demo)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data;//获得当前行数据
+                id = data.id,
+
+                layEvent = obj.event; //获得 lay-event 对应的值
+                if (layEvent === 'detail') {
+                    layer.msg('查看操作');
+                    layer.open({
+                        type: 2,
+                        area: ['700px', '450px'],
+                        content: '/tag/tagPage/'+id
+                    });
+                    // 这里应该是一个弹窗 内容大概是 为文章添加一个标签.删除某个标签 不做分页
+                } else if (layEvent === 'del') {
+                    layer.confirm('真的删除行么', function (index) {
+                        obj.del(); //删除对应行（tr）的DOM结构
+
+                        $.ajax({
+                            url:"/salesOrder/DeleteSaleOrder/"+id,    //请求的url地址
+                            dataType:"json",   //返回格式为json
+                            type:"GET",   //请求方式
+                            success:function (data) {
+                                if (data == '1'){
+                                    layer.confirm('删除成功')
+                                }
+                                else {
+                                    layer.confirm('删除出错,请检查是否有权利删除。。')
+                                }
+                            }
+                        });
+                        layer.close(index);
+                    });
+
+                } else if (layEvent === 'edit') {
+
+                    layer.open({
+                        type: 2,
+                        area: ['1200px', '650px'],
+                        content: '/salesOrder/ShowSaleOrderById/'+id
+                    });
+                } else if(layEvent === 'col'){
+                    layer.open({
+                        type: 2,
+                        area: ['700px', '450px'],
+                        content: '/column/updateTheme'
+                    });
+                }
+                else if(layEvent === 'com'){
+                    layer.open({
+                        type: 2,
+                        area: ['700px', '450px'],
+                        content: '/comments/getComments'
+                    });
+                }
+            });
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
