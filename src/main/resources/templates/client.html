@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
-    <title>销售单</title>
+    <title>客户表</title>
     <link rel="stylesheet" href="/plugins/layui/css/layui.css" media="all" />
     <script src="/plugins/layui/layui.js"></script>
     <script src="/res/js/jquery.min.js"></script>
@@ -25,16 +25,10 @@
         <form class="layui-form" action="">
 
             <div class="layui-form-item">
-                <label class="layui-form-label">选择时间段</label>
+                <label class="layui-form-label">查询名字</label>
+
                 <div class="layui-input-inline">
-                    <select name="timePick">
-                        <option value="">全部</option>
-                        <option value="1">一天内</option>
-                        <option value="2">两天内</option>
-                        <option value="3">三天内</option>
-                        <option value="7">一周内</option>
-                        <option value="30">一个月内</option>
-                    </select>
+                    <input type="text" name="search" id="search" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input"/>
                 </div>
 
                 <div class="layui-input-inline">
@@ -59,7 +53,7 @@
 </script>
 <script>
     var username = document.getElementById("userName").value;
-    var url = '/salesOrder/data/1';
+    var url = '/client/clientSearch/1';
     var nurl = document.getElementById("url").value;
     var turl = null;
     if (nurl == ''||nurl == null||nurl==undefined){
@@ -81,13 +75,15 @@
 //            page:'true',
             url:turl,
             cols: [[
-                {field:'id', title: '文章ID', width:80, sort: true}
-                ,{field:'partid', title: '零件id', width:80, sort: true}
-                ,{field:'saletime', title: '销售时间', width:144, sort: true}
-                ,{field:'salenumber', title: '销售数量', width:220, sort: true}
-                ,{field:'userName', title: '销售员姓名', width:100}
-                ,{field:'payway', title: '付款方式', width:100}
-                ,{field:'clientName', title: '客户姓名', width:100}
+                {field:'id', title: '客户id', width:80, sort: true}
+                ,{field:'typename', title: '类型名称', width:80, sort: true}
+                ,{field:'clientname', title: '客户名称', width:144, sort: true}
+                ,{field:'address', title: '地址', width:220, sort: true}
+                ,{field:'manager', title: '负责人姓名', width:100}
+                ,{field:'region', title: '地区', width:100}
+                ,{field:'currenttime', title: '时间', width:100}
+                ,{field:'bank', title: '开户银行', width:100}
+                ,{field:'cardnumber', title: '银行账号', width:100}
                 ,{field:'describe', title: '备注信息', width:100}
                 ,{toolbar:'#barDemo', title: '操作', width:330}
             ]]
@@ -118,8 +114,8 @@
                     if (!first) {
                         var currentPage = obj.curr;//获取点击的页码
 //                        alert(obj.curr);
-                        url = '/salesOrder/data/'  + currentPage;
-                        window.location.href = '/salesOrder/SaleOrderPage?url=' + url;
+                        url = '/client/clientSearch/1'  + currentPage;
+                        window.location.href = '/client/clientPage?url=' + url;
                     }
                 }
 
@@ -130,15 +126,13 @@
 
             //监听提交
             form.on('submit(formDemo)', function(data) {
-
-                timePick = data.field.timePick;
                 search = data.field.search;
                 if(timePick != null){
-                    url = '/salesOrder/data/1?timePick='+timePick;
+                    url = '/client/clientSearch/1?search='+search;
                 }else{
-                    url = '/salesOrder/data/1';
+                    url = '/client/clientSearch/1';
                 }
-                window.location.href = '/salesOrder/SaleOrderPage?url=' + url;
+                window.location.href = '/client/clientPage?url=' + url;
                 return false;
             });
 
@@ -162,7 +156,7 @@
                         obj.del(); //删除对应行（tr）的DOM结构
 
                         $.ajax({
-                            url:"/salesOrder/DeleteSaleOrder/"+id,    //请求的url地址
+                            url:"/client/deleteClient/"+id,    //请求的url地址
                             dataType:"json",   //返回格式为json
                             type:"GET",   //请求方式
                             success:function (data) {
@@ -182,7 +176,7 @@
                     layer.open({
                         type: 2,
                         area: ['1000px', '450px'],
-                        content: '/salesOrder/ShowSaleOrderById/'+id
+                        content: '/client/editClient/'+id
                     });
                 }
             });

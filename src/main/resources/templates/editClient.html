@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta charset="utf-8"/>
+		<title>表单</title>
+		<meta name="renderer" content="webkit"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<meta name="format-detection" content="telephone=no"/>
+
+		<link rel="stylesheet" href="/plugins/layui/css/layui.css" media="all" />
+		<script src="/plugins/layui/layui.js"></script>
+		<script src="/res/js/jquery.min.js"></script>
+    </head>
+
+	<body>
+
+    <input type="hidden" id="user2" th:value="${session.user}"/>
+		<div style="margin: 15px;">
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+				<legend>编辑订单信息</legend>
+			</fieldset>
+
+			<form class="layui-form" action="" style="height: 100%" >
+
+                <div class="layui-form-item">
+                        <input type="hidden" name="clientId" th:value="${list.id}"  class="layui-input"  />
+                </div>
+
+				<div class="layui-form-item" >
+                    <label class="layui-form-label"><b>类型名称</b></label>
+                    <div class="layui-input-block" th:if="${list.typename}">
+                        <input type="text" name="typename" lay-verify="required" th:value="${list.typename}"  class="layui-input"  />
+                    </div>
+                    <div class="layui-input-block" th:unless="${list.typename}">
+                        <input type="text" name="typename" lay-verify="required"  class="layui-input"  />
+                    </div>
+				</div>
+				<div class="layui-form-item">
+
+                    <label class="layui-form-label"><b>地址</b></label>
+                    <div class="layui-input-block" th:if="${list.address}">
+					    <input type="text" name="address" lay-verify="required" th:value="${list.address}"  class="layui-input"  />
+                    </div>
+                    <div class="layui-input-block" th:unless="${list.address}">
+                        <input type="text" name="address" lay-verify="required"  class="layui-input"  />
+                    </div>
+				</div>
+
+
+				<div class="layui-form-item">
+
+                    <label class="layui-form-label"><b>负责人</b></label>
+                    <div class="layui-input-block" th:if="${list.manager}">
+					    <input type="text" name="manager" lay-verify="required" th:value="${list.manager}"  class="layui-input"  />
+                    </div>
+                    <div class="layui-input-block" th:unless="${list.manager}">
+                        <input type="text" name="manager" lay-verify="required"  class="layui-input"  />
+                    </div>
+				</div>
+				<div class="layui-form-item">
+
+                    <label class="layui-form-label"><b>地区</b></label>
+                    <div class="layui-input-block" th:if="${list.region}">
+					    <input type="text" name="region" lay-verify="required" th:value="${list.region}"  class="layui-input"  />
+                    </div>
+                    <div class="layui-input-block" th:unless="${list.region}">
+                        <input type="text" name="region" lay-verify="required"  class="layui-input"  />
+                    </div>
+				</div>
+                <div class="layui-form-item">
+
+                    <label class="layui-form-label"><b>手机号</b></label>
+                    <div class="layui-input-block" th:if="${list.phonenumber}">
+                        <input type="text" name="phonenumber" lay-verify="required" th:value="${list.phonenumber}"  class="layui-input"  />
+                    </div>
+                    <div class="layui-input-block" th:unless="${list.phonenumber}">
+                        <input type="text" name="phonenumber" lay-verify="required"  class="layui-input"  />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+
+                    <label class="layui-form-label"><b>开户银行</b></label>
+                    <div class="layui-input-block" th:if="${list.bank}">
+                        <input type="text" name="bank" lay-verify="required" th:value="${list.bank}"  class="layui-input"  />
+                    </div>
+                    <div class="layui-input-block" th:unless="${list.bank}">
+                        <input type="text" name="bank" lay-verify="required"  class="layui-input"  />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+
+                    <label class="layui-form-label"><b>银行卡账号</b></label>
+                    <div class="layui-input-block" th:if="${list.cardnumber}">
+                        <input type="text" name="cardnumber" lay-verify="required" th:value="${list.cardnumber}"  class="layui-input"  />
+                    </div>
+                    <div class="layui-input-block" th:unless="${list.cardnumber}">
+                        <input type="text" name="cardnumber" lay-verify="required"  class="layui-input"  />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block" th:if="${list.describe}">
+                        <textarea name="sketch" lay-verify="required" th:value="${list.describe}" placeholder="请输入内容" class="layui-textarea"></textarea>
+                    </div>
+                    <div class="layui-input-block" th:unless="${list.describe}">
+                        <textarea id="sketch" name="sketch" lay-verify="required"  placeholder="请输入内容" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+
+                <p> &nbsp;</p>
+
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<button class="layui-btn" lay-submit="" lay-filter="demo1"  >立即提交</button>
+						<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<script>
+
+			layui.use(['form', 'layedit', 'laydate','upload'], function() {
+				var form = layui.form,
+					layer = layui.layer,
+					layedit = layui.layedit,
+					laydate = layui.laydate;
+                var upload = layui.upload;
+
+
+
+				//监听提交
+				form.on('submit(demo1)', function(data) {
+					var Final =JSON.stringify(data.field);
+					alert(Final);
+					$.ajax({
+                        type : "post",
+                        data:data.field,
+                        dataType:"json",
+                        url :'/client/modifyClientMes/'+parent.id,
+                        timeout : 20000,
+                        cache : false,
+                        success:function (data) {
+                            if(data == 1){
+                                layer.msg("更改成功");
+
+                            }
+                            else{
+                                layer.alert("出错了");
+                                layer.closeAll('iframe');
+                            }
+
+                        }
+                    });
+					return false;
+				});
+
+
+
+			});
+
+		</script>
+	</body>
+
+</html>

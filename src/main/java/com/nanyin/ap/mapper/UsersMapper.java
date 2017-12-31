@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 @Mapper
 public interface UsersMapper {
     /**
@@ -26,5 +28,11 @@ public interface UsersMapper {
 
 //    @Select("SELECT id FROM auto_parts.users WHERE userName=#{name}")
 //    Integer findUserIdByName(String name);
+
+    @Select("SELECT * FROM auto_parts.users LIMIT #{page},#{limit}")
+    List<Users> findUsers(@Param("page") int page,@Param("limit") int limit);
+
+    @Update("UPDATE auto_parts.usersRoleAndPermission SET roleId=#{roleId} WHERE userId=#{userId}")
+    int updateUsersRole(int roleId,int userId);
 
 }

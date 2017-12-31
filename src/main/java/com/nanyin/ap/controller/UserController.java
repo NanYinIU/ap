@@ -1,13 +1,22 @@
 package com.nanyin.ap.controller;
 
+import com.google.common.collect.Maps;
+import com.nanyin.ap.model.vo.UserVo;
+import com.nanyin.ap.service.UsersService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author nanyin
@@ -17,7 +26,8 @@ import javax.servlet.http.HttpSession;
  */
 @Controller
 public class UserController {
-
+    @Autowired
+    UsersService usersService;
     /**
      *
      * @return 返回登录而界面
@@ -51,6 +61,31 @@ public class UserController {
             return "login";
         }
 
+    }
+
+    @RequestMapping("/user/userTableData/{pageNum}")
+    public @ResponseBody Map<String,Object> userTableData(@PathVariable("pageNum") int pageNum){
+        Map<String,Object> map = Maps.newHashMap();
+        List<UserVo> list = usersService.userTable(pageNum);
+        map.put("code",0);
+        map.put("mes","");
+        map.put("count",list.size());
+        map.put("data",list);
+        map.put("pageNum",pageNum);
+        return map;
+    }
+    @RequestMapping("/user/userPage")
+    public ModelAndView userPage(String url){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("user");
+        modelAndView.addObject("url",url);
+        return modelAndView;
+    }
+
+    @RequestMapping("/user/updateUserRole/{userId}")
+    public int updateUserRole(@RequestParam("role") String roleId,@PathVariable("userId") int userId){
+        int role = Integer.parseInt(roleId);
+        return usersService.updateUsersRole(role,userId);
     }
 
 }

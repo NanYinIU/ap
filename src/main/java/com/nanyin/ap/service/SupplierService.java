@@ -14,4 +14,8 @@ public interface SupplierService {
     Supplier findSupplierByName(String name);
 
     List<Supplier> findAllSupplier();
+
+    Supplier findSupplierById(int id);
+
+    
 }

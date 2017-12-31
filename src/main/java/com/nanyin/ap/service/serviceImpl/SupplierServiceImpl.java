@@ -27,4 +27,9 @@ public class SupplierServiceImpl implements SupplierService{
     public List<Supplier> findAllSupplier() {
         return supplierMapper.findAllSupplier();
     }
+
+    @Override
+    public Supplier findSupplierById(int id) {
+        return supplierMapper.findSupplierById(id);
+    }
 }

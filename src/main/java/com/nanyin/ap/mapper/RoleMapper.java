@@ -5,6 +5,7 @@ import com.nanyin.ap.model.Role;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
 import java.util.Set;
 
 @Mapper
@@ -14,4 +15,7 @@ public interface RoleMapper {
             "LEFT JOIN auto_parts.usersRoleAndPermission urp ON r.id = urp.roleId\n" +
             "LEFT JOIN auto_parts.users u ON urp.userId = u.id AND u.userName = #{name}")
     Set<String> findRolesByUsername(String name);
+
+    @Select("SELECT * FROM auto_parts.`role` ")
+    List<Role> findRolesName();
 }

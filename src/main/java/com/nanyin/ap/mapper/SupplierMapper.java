@@ -23,4 +23,7 @@ public interface SupplierMapper {
      */
     @Select("SELECT * FROM auto_parts.supplier")
     List<Supplier> findAllSupplier();
+
+    @Select("SELECT * FROM auto_parts.supplier WHERE id=#{id}")
+    Supplier findSupplierById(int id);
 }

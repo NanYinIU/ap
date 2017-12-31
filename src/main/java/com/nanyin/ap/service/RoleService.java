@@ -1,5 +1,8 @@
 package com.nanyin.ap.service;
 
+import com.nanyin.ap.model.Role;
+
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -11,4 +14,6 @@ import java.util.Set;
 public interface RoleService {
 
     Set<String> findRoleByName(String username);
+
+    List<Role> userRole();
 }
