@@ -16,7 +16,7 @@ public class Role {
     /**
      * 角色名(英文)
      */
-    private String role_name;
+    private String roleName;
 
     /**
      * 角色描述
@@ -32,11 +32,11 @@ public class Role {
     }
 
     public String getRoleName() {
-        return role_name;
+        return roleName;
     }
 
     public void setRoleName(String roleName) {
-        this.role_name = roleName == null ? null : roleName.trim();
+        this.roleName = roleName == null ? null : roleName.trim();
     }
 
     public String getDescribe() {

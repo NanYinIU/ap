@@ -6,6 +6,7 @@ import com.nanyin.ap.model.Users;
 import com.nanyin.ap.model.vo.UserVo;
 import com.nanyin.ap.service.RoleService;
 import com.nanyin.ap.service.UsersService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Service;
@@ -63,7 +64,11 @@ public class UsersServiceImpl implements UsersService{
 
     @Override
     public int updateUsersRole(int roleId, int userId) {
-        return usersMapper.updateUsersRole(roleId,userId);
+        int flag = 0;
+        if(SecurityUtils.getSubject().hasRole("admin")){
+            usersMapper.updateUsersRole(roleId,userId);
+        }
+        return flag;
     }
 
 

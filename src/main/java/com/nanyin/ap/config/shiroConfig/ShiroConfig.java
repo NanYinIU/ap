@@ -36,8 +36,9 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/assets/**", "anon");
         filterChainDefinitionMap.put("/css/**", "anon");
         filterChainDefinitionMap.put("/images/**", "anon");
-        filterChainDefinitionMap.put("/editmd/**", "anon");
-        filterChainDefinitionMap.put("/column/columnPage", "roles[admin]");
+
+        filterChainDefinitionMap.put("/role/changeRole", "roles[admin]");
+
 
         filterChainDefinitionMap.put("/*", "authc");//表示需要认证才可以访问
         filterChainDefinitionMap.put("/**", "authc");
